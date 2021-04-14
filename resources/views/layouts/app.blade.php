@@ -7,6 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta name="userID" content="{{ Auth::user()->id ?? '' }}">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
@@ -15,9 +17,36 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .chat {
+    height: 75vh;
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    overflow: auto;
+}
+
+.message {
+    width: 60%;
+    background: #ff9800;
+    padding: .5rem;
+    color: white;
+    border-radius: 10px;
+}
+
+.message.send {
+    background: #03a9f4;
+    float: right;
+}
+
+.claer {
+    clear: both;
+}
+    </style>
 </head>
 <body>
     <div id="app">

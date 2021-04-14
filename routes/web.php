@@ -21,4 +21,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::view('message', 'message.index');
+Route::get('message', 'MessageController@index')->name('message.index');
+Route::post('message', 'MessageController@store');
+

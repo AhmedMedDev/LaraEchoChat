@@ -47623,16 +47623,60 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 });
 window.Echo.join("online").here(function (users) {
   console.log(users);
+  var AuthID = $('meta[name=userID]').attr('content');
   users.forEach(function (user) {
-    $('#online-users').append("<li id=\"user".concat(user.id, "\" class=\"list-group-item m-1\">").concat(user.name, "</li>"));
+    if (user.id != AuthID) $('#online-users').append("<li id=\"user".concat(user.id, "\" class=\"list-group-item m-1\"> <i class=\"fas fa-circle mr-2 text-success\"></i>  ").concat(user.name, "</li>"));
   });
 }).joining(function (user) {
   console.log("".concat(user.name, " Logging In"));
-  $('#online-users').append("<li id=\"user".concat(user.id, "\" class=\"list-group-item m-1\">").concat(user.name, "</li>"));
+  $('#online-users').append("<li id=\"user".concat(user.id, "\" class=\"list-group-item m-1\"> <i class=\"fas fa-circle mr-2 text-success\"></i>  ").concat(user.name, "</li>"));
+}).listen('MessageDe', function (e) {
+  console.log(e.message.body);
 }).leaving(function (user) {
   console.log("".concat(user.name, " Logging Out"));
   $("#user".concat(user.id)).remove();
 });
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+$('#send').on("click", function (e) {
+  e.preventDefault();
+  $(this).html('Sending..');
+  var formData = new FormData($('#sendMessage')[0]);
+  $.ajax({
+    type: "POST",
+    url: "message",
+    data: formData,
+    processData: false,
+    contentType: false,
+    cache: false,
+    success: function success(data) {
+      $('#sendMessage').trigger("reset");
+      $('#send').html('Send');
+
+      if (data.status = true) {
+        console.log();
+        $('.ajaxMessage').append("<div class=\"message send mb-3\"><p>".concat(data.data.body, "</p></div> <div class=\"claer\"> </div>"));
+        $(".chat").animate({
+          scrollTop: '200000'
+        }, 500);
+        console.log(data.data.body);
+      }
+    },
+    error: function error(data) {
+      console.log('Error:', data);
+      $('#saveBtn').html('Submit');
+    }
+  });
+});
+$(".chat").animate({
+  scrollTop: '10000'
+}); // window.Echo.channel(`online`)
+// .listen('MessageDeliverd', (e) => {
+//     console.log(e.message.body);
+// });
 
 /***/ }),
 
@@ -47699,8 +47743,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\laraEcho\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\laraEcho\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\LaraEchoChat\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\LaraEchoChat\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ }),

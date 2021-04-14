@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MessageDe;
-use App\Events\MessageDeliverd;
-use App\Models\Message;
+use App\Models\Chat;
 use Illuminate\Http\Request;
 
-class MessageController extends Controller
+class ChatController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($senderID,$receiverID)
     {
-        $this->data['Messages'] = Message::all();
 
-        return view('message.index',$this->data);
+        $Chat = Chat::where('senderID',$senderID)->where('receiverID',$receiverID)->get();
+
+         return response()->json([
+             'message' => 'success' ,
+             'data' => $Chat 
+         ]);
     }
 
     /**
@@ -39,24 +41,14 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
+        $request = $request->only(['senderID','receiverID']);
 
-        
-        $request = $request->only(['body','senderID']);
+        $Chat = Chat::create( $request );
 
-        $Message = Message::create( $request );
-
-
-        $this->data = [
-            'status' => 'true',
-            'msg' => 'Done inserted',
-            'data' => $Message,
-
-        ];
-
-        broadcast(new MessageDe($Message))->toOthers();
-
-
-        return response()->json($this->data);
+        return response()->json([
+            'message' => 'success' ,
+            'data' => $Chat ,
+        ]);
     }
 
     /**
